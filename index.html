@@ -1,0 +1,161 @@
+<div id="quizbox" style="
+  max-width:360px;
+  margin:32px auto;
+  padding:22px 18px 26px;
+  background:#fffef8;
+  border-radius:16px;
+  box-shadow:0 10px 28px rgba(0,0,0,0.09);
+  text-align:center;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  border:1px solid #f1f3f5;
+">
+  <div id="quizQ" style="
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:18px;
+    color:#212529;
+    line-height:1.35;
+  "></div>
+
+  <div id="quizOptions"></div>
+</div>
+
+<script>
+const quiz = [
+  {
+    q: "What type of exam are you preparing for?",
+    o: ["Railway","SSC","Police","Teaching","Banking","Other"]
+  },
+  {
+    q: "Which exam are you targeting?",
+    map: {
+      Railway: ["RRB ALP","RRB NTPC","RRB Group D","RRB Technician","RRB Section Controller"],
+      SSC: ["SSC CGL","SSC CHSL","SSC GD","SSC MTS","SSC Stenographer"],
+      Teaching: ["CTET","WBSSC SLST","EMRS","REET","KVS","Railway Teacher","UGC NET","CSIR NET"],
+      Police: ["UP Police Constable","UP Police SI","Bihar Police Constable","Bihar Police SI","Delhi Police Constable","Delhi Police SI"],
+      Banking: ["IBPS PO","IBPS Clerk","SBI PO","SBI Clerk","Other Banking Exam"],
+      Other: ["CUET","Defence Exams","State Exams","Entrance Exams","Other"]
+    }
+  },
+  {
+    q: "How much time is left for your exam?",
+    o: ["Less than 1 month","1–3 months","More than 3 months","Not sure"]
+  }
+];
+
+let curr = 0;
+let selectedCategory = "";
+let timeLeft = "";
+
+const quizQ = document.getElementById("quizQ");
+const quizO = document.getElementById("quizOptions");
+
+function button(text){
+  return `
+    <button onclick="quizNext('${text}')"
+      style="
+        margin:9px auto;
+        padding:11px 18px;
+        background:#1ea84a;
+        color:#fff;
+        border:none;
+        border-radius:9px;
+        font-size:15px;
+        font-weight:700;
+        cursor:pointer;
+        display:block;
+        width:92%;
+        max-width:240px;
+        box-shadow:0 4px 10px rgba(30,168,74,0.25);
+        transition:transform .15s ease, box-shadow .15s ease;">
+      ${text}
+    </button>`;
+}
+
+function showQ(n){
+  quizQ.innerText = quiz[n].q;
+  if(n === 1){
+    quizO.innerHTML = quiz[n].map[selectedCategory].map(x => button(x)).join('');
+  } else {
+    quizO.innerHTML = quiz[n].o.map(x => button(x)).join('');
+  }
+}
+
+window.quizNext = function(ans){
+  if(curr === 0) selectedCategory = ans;
+  if(curr === 2) timeLeft = ans;
+
+  curr++;
+  if(curr < quiz.length){
+    showQ(curr);
+  } else {
+    showResult();
+  }
+};
+
+function showResult(){
+  let uspText = "";
+
+  if(timeLeft === "Less than 1 month"){
+    uspText = "Daily live classes, mock tests & instant doubt solving to help you stay exam-ready.";
+  } else if(timeLeft === "1–3 months"){
+    uspText = "Test series, PYQs & expert guidance to strengthen your preparation.";
+  } else {
+    uspText = "Explore prep tools across 375+ govt exams with flexible plans.";
+  }
+
+  quizQ.innerHTML = `
+    <div style="font-size:21px;font-weight:800;color:#1ea84a;margin-bottom:4px;">
+      Smart prep starts here 🚀
+    </div>
+    <div style="font-size:15px;color:#333;">
+      Try the <span style="color:#fa5252;font-weight:800;">₹1 SuperPass</span>
+    </div>
+  `;
+
+  quizO.innerHTML = `
+    <div style="
+      font-size:14px;
+      margin:14px 0 16px;
+      color:#555;
+      line-height:1.45;">
+      ${uspText}
+    </div>
+
+    <a href="https://testbk.co/1h85x" target="_blank"
+      style="
+        display:inline-block;
+        background:linear-gradient(180deg,#ffe066,#ffd43b);
+        color:#212529;
+        padding:13px 36px;
+        border-radius:10px;
+        font-size:16px;
+        font-weight:800;
+        text-decoration:none;
+        box-shadow:0 5px 14px rgba(255,212,59,0.6);
+      ">
+      Start for ₹1
+    </a>
+
+    <!-- SMART NUDGES -->
+    <div style="
+      margin-top:14px;
+      padding:12px 14px;
+      background:#f8f9fa;
+      border-radius:10px;
+      font-size:12px;
+      color:#495057;
+      line-height:1.6;
+      text-align:left;
+      max-width:270px;
+      margin-left:auto;
+      margin-right:auto;">
+      ✔ Trusted by 2 Cr+ govt exam aspirants<br>
+      ✔ No commitment — cancel anytime<br>
+      ✔ You’ve already taken the first step
+    </div>
+  `;
+}
+
+showQ(curr);
+</script>
